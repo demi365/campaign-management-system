@@ -7,7 +7,8 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 
 import com.makeathon.controller.UrlController;
@@ -30,10 +31,14 @@ import com.sendgrid.helpers.mail.objects.Email;
 import com.sendgrid.helpers.mail.objects.Personalization;
 
 @Service
+@PropertySource("classpath:custom.properties")
 public class MailerService {
 	
-	@Autowired
-	private Environment env;
+//	@Autowired
+//	private Environment env;
+	
+	@Value("#{sendGrid.api.key}")
+	private static String API_KEY;
 	
 	@Autowired
 	CampaignRepository campRepo;
@@ -97,7 +102,7 @@ public class MailerService {
 						    mail.addPersonalization(personal);
 						    
 						    mail.setReplyTo(new Email("no-reply@testing.com"));
-						    SendGrid sg = new SendGrid(env.getProperty("sendGrid.api.key"));
+						    SendGrid sg = new SendGrid(API_KEY);
 						    
 						    Request request = new Request();
 						    try {
