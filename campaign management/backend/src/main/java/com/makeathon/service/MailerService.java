@@ -6,6 +6,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -16,7 +18,9 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 
+import com.makeathon.dto.DTOFactory;
 import com.makeathon.dto.EmailDTO;
+import com.makeathon.dto.WorkDTO;
 import com.makeathon.entity.Campaign;
 import com.makeathon.entity.Work;
 import com.makeathon.repository.CampaignRepository;
@@ -73,18 +77,14 @@ public class MailerService {
 	@Autowired
 	BouncerService bounceService;
 	
-	public String sendEmailViaSendGrid(EmailDTO emailDTO) throws Exception {
+	@Transactional
+	public WorkDTO sendEmailViaSendGrid(EmailDTO emailDTO) throws Exception {
 		
 		Optional<Campaign> campaign = campRepo.findById(emailDTO.getCampaignId());
 		
 		List<String> unsubscribedUsers = unsubRepo.findEmailIdsByCampaignId(emailDTO.getCampaignId());
 		
 	    Work work = new Work();
-	    work.setEmailList(campaign.get().getEmail_list());
-	    work.setHtml(emailDTO.getHtml());
-	    work.setStatus("IN PROGRESS");
-	    workRepo.save(work);
-	    System.out.println(work.getId());
 	    
 		if (campaign.isPresent()) {
 			
@@ -93,13 +93,17 @@ public class MailerService {
 			
 			toEmails.removeAll(unsubscribedUsers);
 			
+			work.setEmailList(toEmails.toString());
+		    work.setHtml(emailDTO.getHtml());
+		    work.setStatus("IN PROGRESS");
+		    workRepo.save(work);
+		    
 		    Email fromEmail = new Email(from);
 		    String subject = campaign.get().getName();
 		    
 		    for(String emailTo : toEmails) {
 		    		
 		    	Email toEmail = new Email(emailTo);
-//			    System.out.println(apiKey + " " + bounceUrl);
 			    
 	    		String htmlToSend = getHtmlWithEmbeddedLinks(emailDTO, work.getId(), emailTo);
 	    		
@@ -122,14 +126,16 @@ public class MailerService {
 				    
 			    } catch (IOException ex) {
 			    	ex.printStackTrace();
-			    	return "not ok";
+			    	return DTOFactory.getWorkDTO(work);
 			    }
 		    }
+		    work.setStatus("SENT");
+		    workRepo.save(work);
 		    
-		    return "ok";
+		    return DTOFactory.getWorkDTO(work);
 		}
 		else {
-			return "not ok";
+			return DTOFactory.getWorkDTO(work);
 		}
 	}
 	
@@ -149,7 +155,6 @@ public class MailerService {
 			bounceService.addLinkToTracking(workId, campaignId, aLink.attr("id"));
 			
 		}
-		System.out.println(html.toString());
 		return html.toString().replace("[Unsubscribe]", 
 				unsubscribeLink.replaceAll("<<campaignId>>", String.valueOf(emailDTO.getCampaignId())).replaceAll("<<userId>>", emailTo));
 	}

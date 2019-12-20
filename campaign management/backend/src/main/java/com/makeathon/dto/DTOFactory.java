@@ -13,6 +13,7 @@ import com.makeathon.entity.LinkHits;
 import com.makeathon.entity.Subscribers;
 import com.makeathon.entity.Template;
 import com.makeathon.entity.UserDetails;
+import com.makeathon.entity.Work;
 
 public class DTOFactory {
 
@@ -189,6 +190,15 @@ public class DTOFactory {
 		linkHitsDTO.setCampaignId(link.getCampaignId());
 		linkHitsDTO.setLinkId(link.getLinkId());
 		return linkHitsDTO;
+	}
+
+	public static WorkDTO getWorkDTO(Work work) {
+		WorkDTO workDTO = new WorkDTO();
+		workDTO.setEmailList(work.getEmailList());
+		workDTO.setId(work.getId());
+		workDTO.setStatus(work.getStatus());
+		workDTO.setUploadedBy(work.getUploadedBy());
+		return workDTO;
 	}
 	
 }
