@@ -15,7 +15,7 @@ import io.swagger.annotations.Api;
 @Api(value = "Urls used for telemetrics and tracking", tags = { "unsubscribe" })
 public class UrlController {
 	
-	public static String unsubscribeLink = "<a href=\"http://3.18.110.172:8080/url/unsubscribe?userId=<<userId>>&campaignId=<<campaignId>>\">Unsubscribe</a>";
+	public static String unsubscribeLink = "<a href=\"http://localhost:8080/url/unsubscribe?userId=<<userId>>&campaignId=<<campaignId>>\">Unsubscribe</a>";
 	
 	@Autowired
 	UrlService urlServices;

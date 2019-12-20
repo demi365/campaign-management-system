@@ -1,20 +1,18 @@
 package com.makeathon.service;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 
 import com.makeathon.controller.UrlController;
 import com.makeathon.dto.EmailDTO;
 import com.makeathon.entity.Campaign;
-import com.makeathon.entity.Template;
 import com.makeathon.entity.UnsubcribeLogs;
 import com.makeathon.entity.Work;
 import com.makeathon.repository.CampaignRepository;
@@ -32,13 +30,13 @@ import com.sendgrid.helpers.mail.objects.Personalization;
 
 @Service
 @PropertySource("classpath:custom.properties")
+@ConfigurationProperties(prefix = "send-grid")
 public class MailerService {
 	
-//	@Autowired
-//	private Environment env;
-	
-	@Value("#{sendGrid.api.key}")
-	private static String API_KEY;
+	private String from;
+	private String replyTo;
+	private String endpoint;
+	private String apiKey;
 	
 	@Autowired
 	CampaignRepository campRepo;
@@ -62,62 +60,49 @@ public class MailerService {
 		
 		if(unsubs!=null)
 			unsubs.stream().forEach(unsub -> unsubUsers.add(unsub.getUserId()));
-		System.out.println(unsubUsers);
 		
 		if (campaign.isPresent()) {
 			
 			String[] toEmails = campaign.get().getEmail_list().split(";");
 			
-		    Email from = new Email("testinfosys3@gmail.com");
+		    Email fromEmail = new Email(from);
 		    String subject = campaign.get().getName();
 		    Personalization personal = new Personalization();
 		    
 		    for(String emailTo : toEmails) {
 		    	if(unsubUsers.isEmpty() || !unsubUsers.contains(emailTo)) {
 		    		
-		    		System.out.println("email sent to "+emailTo);
-			    	personal = new Personalization();
+		    		personal = new Personalization();
 			    	personal.addTo(new Email(emailTo));
 			    	
-			    	Optional<Campaign> campaignToRun = campRepo.findById(emailDTO.getCampaignId());
-			    	
-			    	Set<Template> templatesToRun = campaignToRun.get().getTemplates();
-			    	
-			    	for(Template templateToRun : templatesToRun) {
+		    		String htmlToSend = emailDTO.getHtml().replace("[Unsubscribe]", 
+			    				unsubcampaignLink.replaceAll("<<userId>>", emailTo));
 			    		
-				    	Optional<Template> template = tempRepo.findById(templateToRun.getId());
-				    	if(template.isPresent()) {
-				    		
-				    		String htmlToSend = emailDTO.getHtml().replace("[Unsubscribe]", 
-				    				unsubcampaignLink.replaceAll("<<userId>>", emailTo));
-				    		
-						    Content content = new Content("text/html", 
-						    		htmlToSend);
-						    
-						    Mail mail = new Mail();
-						    
-						    mail.setFrom(from);
-						    mail.setSubject(subject);
-						    mail.addContent(content);
-						    mail.addPersonalization(personal);
-						    
-						    mail.setReplyTo(new Email("no-reply@testing.com"));
-						    SendGrid sg = new SendGrid(API_KEY);
-						    
-						    Request request = new Request();
-						    try {
-						      request.setMethod(Method.POST);
-						      request.setEndpoint("mail/send");
-						      request.setBody(mail.build());
-						      Response response = sg.api(request);
-						      System.out.println(response.getStatusCode());
-						      System.out.println(response.getBody());
-						      System.out.println(response.getHeaders());
-						    } catch (IOException ex) {
-						      return "not ok";
-						    }
-				    	}
-			    	}
+				    Content content = new Content(MediaType.TEXT_HTML_VALUE, 
+				    		htmlToSend);
+				    
+				    Mail mail = new Mail();
+				    
+				    mail.setFrom(fromEmail);
+				    mail.setSubject(subject);
+				    mail.addContent(content);
+				    mail.addPersonalization(personal);
+				    
+				    mail.setReplyTo(new Email(replyTo));
+				    SendGrid sg = new SendGrid(apiKey);
+				    
+				    Request request = new Request();
+//				    try {
+				      request.setMethod(Method.POST);
+				      request.setEndpoint(endpoint);
+				      request.setBody(mail.build());
+				      Response response = sg.api(request);
+				      System.out.print(response.getStatusCode()+" ");
+				      System.out.println("Email sent to "+emailTo);
+				    	
+//				    } catch (IOException ex) {
+//				      return "not ok";
+//				    }
 		    	}
 		    }
 		    
@@ -133,6 +118,38 @@ public class MailerService {
 		else {
 			return "not ok";
 		}
+	}
+
+	public String getFrom() {
+		return from;
+	}
+
+	public void setFrom(String from) {
+		this.from = from;
+	}
+
+	public String getReplyTo() {
+		return replyTo;
+	}
+
+	public void setReplyTo(String replyTo) {
+		this.replyTo = replyTo;
+	}
+
+	public String getEndpoint() {
+		return endpoint;
+	}
+
+	public void setEndpoint(String endpoint) {
+		this.endpoint = endpoint;
+	}
+
+	public String getApiKey() {
+		return apiKey;
+	}
+
+	public void setApiKey(String apiKey) {
+		this.apiKey = apiKey;
 	}
 	
 }

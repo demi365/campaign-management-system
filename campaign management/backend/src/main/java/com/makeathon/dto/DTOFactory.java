@@ -5,8 +5,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.codec.digest.DigestUtils;
+
 import com.makeathon.entity.Campaign;
 import com.makeathon.entity.Images;
+import com.makeathon.entity.Subscribers;
 import com.makeathon.entity.Template;
 import com.makeathon.entity.UserDetails;
 
@@ -50,9 +53,11 @@ public class DTOFactory {
 		UserDTO userDTO = new UserDTO();
 		userDTO.setEmailId(user.getEmailId());
 //		userDTO.setPassword(user.getPassword());
+		userDTO.setAuthCode(user.getAuthCode());
 		userDTO.setLastName(user.getLastName());
 		userDTO.setFirstName(user.getFirstName());
 		userDTO.setDateOfBirth(user.getDateOfBirth());
+		userDTO.setOrgId(user.getOrgId());
 		return userDTO;
 		
 	}
@@ -65,6 +70,9 @@ public class DTOFactory {
 		user.setLastName(userDTO.getLastName());
 		user.setFirstName(userDTO.getFirstName());
 		user.setDateOfBirth(userDTO.getDateOfBirth());
+		user.setOrgId(userDTO.getOrgId());
+		user.setAuthCode(DigestUtils.md5Hex(userDTO.getEmailId()).toUpperCase());
+		
 		return user;
 		
 	}
@@ -116,6 +124,42 @@ public class DTOFactory {
 		campaignDTO.setTemplateIds(templateIds);
 		campaignDTO.setTemplatesDTO(templateDTOs);
 		return campaignDTO;
+	}
+
+	public static SubscribersDTO getSubscriberDTO(Subscribers sub) {
+		SubscribersDTO subDTO = new SubscribersDTO();
+		subDTO.setId(sub.getId());
+		subDTO.setActive(sub.isActive());
+		subDTO.setAddress(sub.getAddress());
+		subDTO.setCountry(sub.getCountry());
+		subDTO.setFirstName(sub.getFirstName());
+		subDTO.setGender(sub.getGender());
+		subDTO.setLastName(sub.getLastName());
+		subDTO.setMailBoxId(sub.getMailBoxId());
+		subDTO.setSrcSysId(sub.getSrcSysId());
+		subDTO.setState(sub.getState());
+		subDTO.setAge(sub.getAge());		
+		subDTO.setRegion(sub.getRegion());
+		subDTO.setPhoneNumber(sub.getPhoneNumber());
+		return subDTO;
+	}
+
+	public static Subscribers getSubscriber(SubscribersDTO subDTO) {
+		Subscribers sub = new Subscribers();
+//		sub.setId(subDTO.getId());
+		sub.setActive(subDTO.isActive());
+		sub.setAddress(subDTO.getAddress());
+		sub.setCountry(subDTO.getCountry());
+		sub.setFirstName(subDTO.getFirstName());
+		sub.setGender(subDTO.getGender());
+		sub.setLastName(subDTO.getLastName());
+		sub.setMailBoxId(subDTO.getMailBoxId());
+		sub.setSrcSysId(subDTO.getSrcSysId());
+		sub.setState(subDTO.getState());
+		sub.setAge(subDTO.getAge());		
+		sub.setRegion(subDTO.getRegion());
+		sub.setPhoneNumber(subDTO.getPhoneNumber());
+		return sub;
 	}
 	
 }
