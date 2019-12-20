@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.MediaType;
@@ -32,7 +33,8 @@ import com.sendgrid.helpers.mail.objects.Personalization;
 @PropertySource("classpath:custom.properties")
 @ConfigurationProperties(prefix = "send-grid")
 public class MailerService {
-	
+
+	public String unsubscribeLink;
 	private String from;
 	private String replyTo;
 	private String endpoint;
@@ -55,7 +57,7 @@ public class MailerService {
 		Optional<Campaign> campaign = campRepo.findById(emailDTO.getCampaignId());
 		List<UnsubcribeLogs> unsubs = unsubRepo.findByCampaignId(emailDTO.getCampaignId());
 		
-		String unsubcampaignLink = UrlController.unsubscribeLink.replaceAll("<<campaignId>>", String.valueOf(emailDTO.getCampaignId()));
+		String unsubcampaignLink = unsubscribeLink.replaceAll("<<campaignId>>", String.valueOf(emailDTO.getCampaignId()));
 		List<String> unsubUsers = new ArrayList<String>();
 		
 		if(unsubs!=null)
@@ -150,6 +152,14 @@ public class MailerService {
 
 	public void setApiKey(String apiKey) {
 		this.apiKey = apiKey;
+	}
+
+	public String getUnsubscribeLink() {
+		return unsubscribeLink;
+	}
+
+	public void setUnsubscribeLink(String unsubscribeLink) {
+		this.unsubscribeLink = unsubscribeLink;
 	}
 	
 }

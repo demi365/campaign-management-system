@@ -1,7 +1,6 @@
 package com.makeathon.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,9 +14,6 @@ import io.swagger.annotations.Api;
 @RequestMapping("/url")
 @Api(value = "Urls used for telemetrics and tracking", tags = { "unsubscribe" })
 public class UrlController {
-	
-	@Value("#{urls.unsubscribe}")
-	public static String unsubscribeLink;
 	
 	@Autowired
 	UrlService urlServices;

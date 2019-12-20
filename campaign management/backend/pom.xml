@@ -69,7 +69,7 @@
 		    <artifactId>sendgrid-java</artifactId>
 	    </dependency>
 		 <!-- H2 Database -->
-		 <!-- <dependency>
+		 <dependency>
 			 <groupId>com.h2database</groupId>
 			 <artifactId>h2</artifactId>
 			 <optional>true</optional>
@@ -78,11 +78,18 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <optional>true</optional>
-        </dependency> -->
-		 <dependency>
+        </dependency>
+		<!-- <dependency>
 		    <groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency> -->
+		<!-- https://mvnrepository.com/artifact/org.jsoup/jsoup -->
+		<dependency>
+		    <groupId>org.jsoup</groupId>
+		    <artifactId>jsoup</artifactId>
+		    <version>1.12.1</version>
 		</dependency>
+		
 		 
 	</dependencies>
 
