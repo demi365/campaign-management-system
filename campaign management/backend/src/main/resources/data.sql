@@ -14,3 +14,6 @@ insert into Subscribers(first_Name, last_name, mail_Box_Id, org_Id, src_Sys_Id, 
 insert into Subscribers(first_Name, last_name, mail_Box_Id, org_Id, src_Sys_Id, country, state, region, age, is_active, gender, phone_number) values('deepak','kumar', 'deepak@getter.com', 0, '12451252', 'England', 'London', 'region 2', 15, true, 'male', '91');
 insert into Subscribers(first_Name, last_name, mail_Box_Id, org_Id, src_Sys_Id, country, state, region, age, is_active, gender, phone_number) values('deepak','kumar', 'deepak@setter.com', 0, '12451253', 'England', 'Manchester', 'region 2', 15, true, 'male', '91');
 insert into Subscribers(first_Name, last_name, mail_Box_Id, org_Id, src_Sys_Id, country, state, region, age, is_active, gender, phone_number) values('deepak','kumar', 'deepak@github.com', 0, '12451255', 'England', 'London', 'region 1', 15, true, 'male', '91');
+
+insert into system_templates values ('UNSUBSCRIBE','<a href="http://{host}:8080/url/unsubscribe?userId=<<userId>>&campaignId=<<campaignId>>">Unsubscribe</a>');
+insert into system_templates values ('BOUNCE_URL','http://{host}:8080/bouncers/track?campaign_id={campaign_id}&work_id={work_id}&input_id={inputId}&url={url}');

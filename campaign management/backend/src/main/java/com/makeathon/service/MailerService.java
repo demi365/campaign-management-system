@@ -24,6 +24,7 @@ import com.makeathon.dto.WorkDTO;
 import com.makeathon.entity.Campaign;
 import com.makeathon.entity.Work;
 import com.makeathon.repository.CampaignRepository;
+import com.makeathon.repository.SystemTemplatesRepository;
 import com.makeathon.repository.TemplateRepository;
 import com.makeathon.repository.UnsubscribeRepository;
 import com.makeathon.repository.WorkRepository;
@@ -61,6 +62,9 @@ public class MailerService {
 	@Getter
 	@Setter
 	private String bounceUrl;
+	@Getter
+	@Setter
+	private String host;
 	
 	@Autowired
 	CampaignRepository campRepo;
@@ -76,6 +80,9 @@ public class MailerService {
 	
 	@Autowired
 	BouncerService bounceService;
+
+	@Autowired
+	SystemTemplatesRepository systemTemplatesRepo;
 	
 	@Transactional
 	public WorkDTO sendEmailViaSendGrid(EmailDTO emailDTO) throws Exception {
@@ -144,7 +151,9 @@ public class MailerService {
 		Document html= Jsoup.parse(emailDTO.getHtml());
 		Elements aLinks = html.select("a[href]");
 		int campaignId = emailDTO.getCampaignId();
-		String bounceBackUrl = bounceUrl.replace("{campaign_id}", String.valueOf(campaignId));
+		String bounceBackUrl = systemTemplatesRepo.findById(bounceUrl).get().getHtml()
+								.replace("{host}", host)
+								.replace("{campaign_id}", String.valueOf(campaignId));
 		bounceBackUrl = bounceBackUrl.replace("{work_id}", String.valueOf(workId));
 		
 		for(Element aLink : aLinks) { 
@@ -156,7 +165,10 @@ public class MailerService {
 			
 		}
 		return html.toString().replace("[Unsubscribe]", 
-				unsubscribeLink.replaceAll("<<campaignId>>", String.valueOf(emailDTO.getCampaignId())).replaceAll("<<userId>>", emailTo));
+				systemTemplatesRepo.findById(unsubscribeLink).get().getHtml()
+				.replace("{host}", host)
+				.replaceAll("<<campaignId>>", String.valueOf(emailDTO.getCampaignId()))
+				.replaceAll("<<userId>>", emailTo));
 	}
 	
 }
