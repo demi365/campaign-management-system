@@ -161,5 +161,24 @@ public class DTOFactory {
 		sub.setPhoneNumber(subDTO.getPhoneNumber());
 		return sub;
 	}
+
+	public static Subscribers getSubscriber(SubscribersDTO subDTO, int orgId) {
+		Subscribers sub = new Subscribers();
+//		sub.setId(subDTO.getId());
+		sub.setActive(subDTO.isActive());
+		sub.setAddress(subDTO.getAddress());
+		sub.setCountry(subDTO.getCountry());
+		sub.setFirstName(subDTO.getFirstName());
+		sub.setGender(subDTO.getGender());
+		sub.setLastName(subDTO.getLastName());
+		sub.setMailBoxId(subDTO.getMailBoxId());
+		sub.setSrcSysId(subDTO.getSrcSysId());
+		sub.setState(subDTO.getState());
+		sub.setAge(subDTO.getAge());		
+		sub.setRegion(subDTO.getRegion());
+		sub.setPhoneNumber(subDTO.getPhoneNumber());
+		sub.setOrgId(orgId);
+		return sub;
+	}
 	
 }

@@ -56,11 +56,12 @@ public class CrmService {
 		HttpStatus statusCode;
 		String message;
 		
-		
 		if(user.isPresent()) {
+
+			int orgId = user.get().getOrgId();
 			
 			List<Subscribers> suppliedSubscribers = new ArrayList<>();
-			crmDTO.getCustomers().stream().forEach(cust -> suppliedSubscribers.add(DTOFactory.getSubscriber(cust)));
+			crmDTO.getCustomers().stream().forEach(cust -> suppliedSubscribers.add(DTOFactory.getSubscriber(cust, orgId)));
 			
 			Set<Subscribers> existingCustomers = crmRepo.findByOrgId(crmDTO.getOrgId());
 			
@@ -121,19 +122,19 @@ public class CrmService {
 		return crmRepo.findDistinctCountryValuesByOrgId(orgId);
 		
 	}
-
+	
 	public List<String> findAllStatesByOrgIdAndCountry(@Valid int orgId, @Valid String country) {
 		
 		return crmRepo.findAllStates(orgId, country);
 		
 	}
-
+	
 	public List<String> fecthAllRegionsByOrgIdAndCountryAndState(@Valid int orgId, @Valid String country,
 			@Valid String state) {
 
 		return crmRepo.findAllRegions(orgId, country, state);
 	}
-
+	
 	public List<String> fecthAllEmailsByOrgIdAndCountryAndStateAndRegion(@Valid int orgId, @Valid String country,
 			@Valid String state, String region) {
 		return crmRepo.findAllEmails(orgId, country, state, region);

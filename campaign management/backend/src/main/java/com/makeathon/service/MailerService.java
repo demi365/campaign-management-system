@@ -5,13 +5,11 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 
-import com.makeathon.controller.UrlController;
 import com.makeathon.dto.EmailDTO;
 import com.makeathon.entity.Campaign;
 import com.makeathon.entity.UnsubcribeLogs;
@@ -33,7 +31,7 @@ import com.sendgrid.helpers.mail.objects.Personalization;
 @PropertySource("classpath:custom.properties")
 @ConfigurationProperties(prefix = "send-grid")
 public class MailerService {
-
+	
 	public String unsubscribeLink;
 	private String from;
 	private String replyTo;
