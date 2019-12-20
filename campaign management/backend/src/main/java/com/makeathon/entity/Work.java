@@ -9,9 +9,11 @@ import javax.persistence.Lob;
 import org.hibernate.annotations.Type;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
+@NoArgsConstructor
 public class Work {
 	
 	@Id

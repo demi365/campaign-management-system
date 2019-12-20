@@ -9,6 +9,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 
 import com.makeathon.entity.Campaign;
 import com.makeathon.entity.Images;
+import com.makeathon.entity.LinkHits;
 import com.makeathon.entity.Subscribers;
 import com.makeathon.entity.Template;
 import com.makeathon.entity.UserDetails;
@@ -179,6 +180,15 @@ public class DTOFactory {
 		sub.setPhoneNumber(subDTO.getPhoneNumber());
 		sub.setOrgId(orgId);
 		return sub;
+	}
+
+	public static LinkHitsDTO getLinkDTO(LinkHits link) {
+		LinkHitsDTO linkHitsDTO = new LinkHitsDTO();
+		linkHitsDTO.setClicks(link.getClicks());
+		linkHitsDTO.setIpAddresses(link.getIpAddresses().split(";"));
+		linkHitsDTO.setCampaignId(link.getCampaignId());
+		linkHitsDTO.setLinkId(link.getLinkId());
+		return linkHitsDTO;
 	}
 	
 }
