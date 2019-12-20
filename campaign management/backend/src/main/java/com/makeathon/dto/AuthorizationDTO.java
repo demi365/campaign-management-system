@@ -5,10 +5,9 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CampTempMapDTO {
+public class AuthorizationDTO {
 	
-	private int campaignId;
+	private String authorizationCode;
+	private int orgId;
 	
-	private int templateId;
-
 }
