@@ -8,6 +8,7 @@ import java.util.Set;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import com.makeathon.entity.Campaign;
+import com.makeathon.entity.Feedbacks;
 import com.makeathon.entity.Images;
 import com.makeathon.entity.LinkHits;
 import com.makeathon.entity.Subscribers;
@@ -122,9 +123,9 @@ public class DTOFactory {
 			templateDTOs.add(getDTO(template));
 			templateIds.add(template.getId());
 		});
-		
+		campaignDTO.setFeedbacks(camp.getFeedbacks());
 		campaignDTO.setTemplateIds(templateIds);
-		campaignDTO.setTemplatesDTO(templateDTOs);
+		campaignDTO.setTemplateDTOs(templateDTOs);
 		return campaignDTO;
 	}
 
@@ -199,6 +200,24 @@ public class DTOFactory {
 		workDTO.setStatus(work.getStatus());
 		workDTO.setUploadedBy(work.getUploadedBy());
 		return workDTO;
+	}
+
+	public static Feedbacks getFeedbackEntity(FeedbackDTO feedbackDTO) {
+		Feedbacks feedback = new Feedbacks();
+		feedback.setCampaignId(feedbackDTO.getCampaignId());
+		feedback.setUserId(feedbackDTO.getUserId());
+		feedback.setRating(feedbackDTO.getRating());
+		feedback.setFeedbackComments(feedbackDTO.getFeedbackComments());
+		return feedback;
+	}
+
+	public static FeedbackDTO getFeedbackDTO(Feedbacks feedback) {
+		FeedbackDTO feedbackDTO = new FeedbackDTO();
+		feedbackDTO.setCampaignId(feedback.getCampaignId());
+		feedbackDTO.setUserId(feedback.getUserId());
+		feedbackDTO.setRating(feedback.getRating());
+		feedbackDTO.setFeedbackComments(feedback.getFeedbackComments());
+		return feedbackDTO;
 	}
 	
 }
