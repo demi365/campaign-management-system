@@ -3,6 +3,8 @@ package com.makeathon.dto;
 import java.util.List;
 import java.util.Set;
 
+import com.makeathon.entity.Feedbacks;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -26,8 +28,7 @@ public class CampaignDTO {
 	
 	private List<Integer> templateIds;
 	
-	private List<TemplateDTO> templateDTOs;
+	private Set<TemplateDTO> templateDTOs;
 	
-	private Set<TemplateDTO> templatesDTO;
-	
+	private List<Feedbacks> feedbacks;
 }

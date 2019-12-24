@@ -2,10 +2,12 @@ package com.makeathon.entity;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -19,10 +21,13 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.Data;
 
 @Data
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 public class Campaign {
 
 	@Id
@@ -49,5 +54,7 @@ public class Campaign {
 	private String email_list;
 	@OneToMany(targetEntity = Template.class)
 	private Set<Template> templates = new HashSet<Template>();
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "campaignId")
+    private List<Feedbacks> feedbacks;
 	
 }

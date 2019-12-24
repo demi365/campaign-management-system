@@ -93,5 +93,12 @@ public class TemplateService {
 		return campaignDTOs;
 		
 	}
+
+	public CampaignDTO createCampaign(@Valid CampaignTemplateDTO campTemplDTO) {
+		
+		Campaign camp = DTOFactory.getCampaignEntity(campTemplDTO);
+		campRepo.save(camp);
+		return DTOFactory.getCampaignDTO(camp);
+	}
 	
 }

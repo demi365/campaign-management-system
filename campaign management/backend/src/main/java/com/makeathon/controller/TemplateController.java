@@ -60,6 +60,13 @@ public class TemplateController {
 		return tempService.createCampaignsAndTemplates(campTemplDTO);
         
     }
+
+	@PostMapping(value = "/save", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public CampaignDTO createCampaign(@Valid @RequestBody CampaignTemplateDTO campTemplDTO) {
+		
+		return tempService.createCampaign(campTemplDTO);
+        
+    }
 	
 	@GetMapping(value = "/campsandtemps/{user_id}")
 	public CampaignAndTemplatesDTO fetchAllCampaignsAndTemplates(@Valid @PathVariable("user_id") String user_id) {
