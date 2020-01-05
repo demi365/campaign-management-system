@@ -7,10 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.makeathon.dto.AuthorizationDTO;
@@ -30,11 +31,12 @@ public class CrmIntegrationController {
 	@Autowired
 	CrmService crmService;
 	
-	@PutMapping(value="/fetch", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value="/fetch", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(value = "Retrives all customer data if authorization code and organisation id match",
 	notes = "The scource id which was retrieved will be retrieved as srcSysId")
-	public List<SubscribersDTO> getAllCustomersData(@RequestBody @Valid AuthorizationDTO authDTO) {
-		
+	public List<SubscribersDTO> getAllCustomersData(@RequestParam("auth_code") @Valid String authCode) {
+		AuthorizationDTO authDTO = new AuthorizationDTO();
+		authDTO.setAuthorizationCode(authCode);
 		return crmService.fetchAllCustomersData(authDTO);
 		
 	}

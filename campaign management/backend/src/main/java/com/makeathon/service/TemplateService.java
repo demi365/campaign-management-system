@@ -100,5 +100,11 @@ public class TemplateService {
 		campRepo.save(camp);
 		return DTOFactory.getCampaignDTO(camp);
 	}
+
+	public void deleteTemplate(@Valid int templateId) {
+		
+		tempRepo.deleteById(templateId);
+		
+	}
 	
 }

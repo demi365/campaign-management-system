@@ -6,6 +6,7 @@ import lombok.Data;
 public class FeedbackDTO {
 
 	private int campaignId;
+	private int templateId;
 	private int userId;
 	private int rating;
 	private String feedbackComments;

@@ -123,7 +123,6 @@ public class DTOFactory {
 			templateDTOs.add(getDTO(template));
 			templateIds.add(template.getId());
 		});
-		campaignDTO.setFeedbacks(camp.getFeedbacks());
 		campaignDTO.setTemplateIds(templateIds);
 		campaignDTO.setTemplateDTOs(templateDTOs);
 		return campaignDTO;
@@ -205,6 +204,7 @@ public class DTOFactory {
 	public static Feedbacks getFeedbackEntity(FeedbackDTO feedbackDTO) {
 		Feedbacks feedback = new Feedbacks();
 		feedback.setCampaignId(feedbackDTO.getCampaignId());
+		feedback.setTemplateId(feedbackDTO.getTemplateId());
 		feedback.setUserId(feedbackDTO.getUserId());
 		feedback.setRating(feedbackDTO.getRating());
 		feedback.setFeedbackComments(feedbackDTO.getFeedbackComments());
@@ -214,6 +214,7 @@ public class DTOFactory {
 	public static FeedbackDTO getFeedbackDTO(Feedbacks feedback) {
 		FeedbackDTO feedbackDTO = new FeedbackDTO();
 		feedbackDTO.setCampaignId(feedback.getCampaignId());
+		feedbackDTO.setTemplateId(feedback.getTemplateId());
 		feedbackDTO.setUserId(feedback.getUserId());
 		feedbackDTO.setRating(feedback.getRating());
 		feedbackDTO.setFeedbackComments(feedback.getFeedbackComments());

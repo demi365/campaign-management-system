@@ -13,4 +13,5 @@ public class FeedbackId implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private int campaignId;
 	private int userId;
+	private int templateId;
 }

@@ -38,10 +38,11 @@ public class CrmService {
 	
 	public List<SubscribersDTO> fetchAllCustomersData(AuthorizationDTO authDTO){
 		
-		Optional<UserDetails> user = userRepo.findByOrgIdAndAuthCode(authDTO.getOrgId(), authDTO.getAuthorizationCode());
+		Optional<UserDetails> user = userRepo.findByAuthCode(authDTO.getAuthorizationCode());
 		if(user.isPresent()) {
 			List<SubscribersDTO> subscribersInformation = new ArrayList<SubscribersDTO>();
-			Set<Subscribers> subscribers = crmRepo.findByOrgId(authDTO.getOrgId());
+			System.out.println(user.get().getOrgId());
+			Set<Subscribers> subscribers = crmRepo.findByOrgId(user.get().getOrgId());
 			subscribers.stream().forEach(sub -> subscribersInformation.add(DTOFactory.getSubscriberDTO(sub)));
 			return subscribersInformation;
 		}

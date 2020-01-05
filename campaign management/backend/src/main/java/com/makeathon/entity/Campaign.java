@@ -2,12 +2,10 @@ package com.makeathon.entity;
 
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -52,9 +50,7 @@ public class Campaign {
 	@Lob
 	@Type(type="org.hibernate.type.TextType")
 	private String email_list;
-	@OneToMany(targetEntity = Template.class)
+	@OneToMany(targetEntity = Template.class, mappedBy = "campaign")
 	private Set<Template> templates = new HashSet<Template>();
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "campaignId")
-    private List<Feedbacks> feedbacks;
 	
 }
